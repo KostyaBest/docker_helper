@@ -1,0 +1,121 @@
+#!/bin/python3
+
+from sys import argv
+from subprocess import run
+#To use this script You must insert current user into docker group or (sudo chmod 666 /var/run/docker.sock)
+
+#CONTAINERS
+def create_new_container(arguments:list)->None:
+    if len(arguments) < 1:
+        name = _ask_valid_value("container name")
+        out_port = _ask_valid_value("out port")
+        container_port = _ask_valid_value("container port")
+        image_name = _ask_valid_value("image name")
+    else:
+        name = arguments[0]
+        out_port = arguments[1]
+        container_port = arguments[2]
+        image_name = arguments[3]
+    run(["docker","run","-it","-d","--name",name,"-p",f"{out_port}:{container_port}",image_name])
+
+def run_container(arguments:list)->None:
+    if len(arguments) < 1:
+        name = _ask_valid_value("container name")
+    else:
+        name = arguments[0]
+    run(["docker","start",name])
+
+def save_container_as_image(arguments:list)->None:
+    if len(arguments) < 1:
+        name = _ask_valid_value("container name")
+    else:
+        name = arguments[0]
+    run(["docker","container","commit",name])
+def stop_container(arguments:list)->None:
+    if len(arguments) < 1:
+        name = _ask_valid_value("running container name")
+    else:
+        name = arguments[0]
+    run(["docker","stop",name])
+
+def get_into_containers_shell(arguments:list)->None:
+    if len(arguments) < 1:
+        name = _ask_valid_value("running container name")
+    else:
+        name = arguments[0]
+    run(["docker","exec","-it",name,"bash"])
+
+def show_all_running_containers(arguments:list)->None:
+    run(["docker","ps"])
+
+def show_all_containers(arguments:list)->None:
+    run(["docker","ps","-a"])
+
+def delete_container(arguments:list)->None:
+    if len(arguments) < 1:
+        name = _ask_valid_value("container name for delete")
+    else:
+        name = arguments[0]
+    run(["docker","rm",name])
+
+#IMAGES
+def install_image(arguments:list)->None:
+    if len(arguments) < 1:
+        name = _ask_valid_value("image name")
+    else:
+        name = arguments[0]
+    run(["docker","pull",name])
+
+def show_all_images(arguments:list)->None:
+    run(["docker","images"])
+
+def delete_image(arguments:list)->None:
+    if len(arguments) < 1:
+        name = _ask_valid_value("image name for removing")
+    else:
+        name = arguments[0]
+    run(["docker","rmi",name])
+
+#GENERAL
+def _ask_valid_value(name:str)->str:
+    print(f"Input valid {name}:")
+    return input()
+
+def help(arguments:list)->None:
+    print("NAME-COMMAND:")
+    print()
+    for name,command in COMMANDS.items():
+        print(f"{name} - {command.__name__}")
+
+COMMANDS={
+    #CONTAINERS
+    "containers_create":create_new_container,
+    "containers_run":run_container,
+    "containers_stop":stop_container,
+    "containers_shell":get_into_containers_shell,
+    "shell":get_into_containers_shell,
+    "containers_show_all_running":show_all_running_containers,
+    "show":show_all_running_containers,
+    "containers_save":save_container_as_image,
+    "show_all":show_all_containers,
+    "containers_delete":delete_container,
+    #IMAGES
+    "images":show_all_images,
+    "images_install":install_image,
+    "images_delete":delete_image,
+    #GENERAL
+    "help":help,
+}
+
+def main()->None:
+    args=argv[1::]
+    if not args:
+        COMMANDS["help"]([])
+        return
+    if args[0] in COMMANDS:
+        COMMANDS[args[0]](args[1::])
+        return
+    COMMANDS["help"]([])
+
+if __name__ == "__main__":
+    main()
