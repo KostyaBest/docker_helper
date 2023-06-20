@@ -5,6 +5,14 @@ from subprocess import run
 #To use this script You must insert current user into docker group or (sudo chmod 666 /var/run/docker.sock)
 
 #CONTAINERS
+def build_new_container_from_docker_file(arguments:list)->None:
+    if len(arguments) < 2:
+        name = _ask_valid_value("container name")
+        version = _ask_valid_value("container version")
+    else:
+        name = arguments[0]
+        version = arguments[1]
+    run(["docker","build",".","-t",f"{name}:{version}"])
 def create_new_container(arguments:list)->None:
     if len(arguments) < 1:
         name = _ask_valid_value("container name")
@@ -89,6 +97,7 @@ def help(arguments:list)->None:
 
 COMMANDS={
     #CONTAINERS
+    "containers_build":build_new_container_from_docker_file,
     "containers_create":create_new_container,
     "containers_run":run_container,
     "containers_stop":stop_container,
