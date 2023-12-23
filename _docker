@@ -12,7 +12,7 @@ def build_new_container_from_docker_file(arguments:list)->None:
     else:
         name = arguments[0]
         version = arguments[1]
-    run(["docker","build",".","-t",f"{name}:{version}"])
+    run(["sudo","docker","build",".","-t",f"{name}:{version}"])
 def create_new_container(arguments:list)->None:
     if len(arguments) < 1:
         name = _ask_valid_value("container name")
@@ -24,47 +24,47 @@ def create_new_container(arguments:list)->None:
         out_port = arguments[1]
         container_port = arguments[2]
         image_name = arguments[3]
-    run(["docker","run","-it","-d","--name",name,"-p",f"{out_port}:{container_port}",image_name])
+    run(["sudo","docker","run","-it","-d","--name",name,"-p",f"{out_port}:{container_port}",image_name])
 
 def run_container(arguments:list)->None:
     if len(arguments) < 1:
         name = _ask_valid_value("container name")
     else:
         name = arguments[0]
-    run(["docker","start",name])
+    run(["sudo","docker","start",name])
 
 def save_container_as_image(arguments:list)->None:
     if len(arguments) < 1:
         name = _ask_valid_value("container name")
     else:
         name = arguments[0]
-    run(["docker","container","commit",name])
+    run(["sudo","docker","container","commit",name])
 def stop_container(arguments:list)->None:
     if len(arguments) < 1:
         name = _ask_valid_value("running container name")
     else:
         name = arguments[0]
-    run(["docker","stop",name])
+    run(["sudo","docker","stop",name])
 
 def get_into_containers_shell(arguments:list)->None:
     if len(arguments) < 1:
         name = _ask_valid_value("running container name")
     else:
         name = arguments[0]
-    run(["docker","exec","-it",name,"bash"])
+    run(["sudo","docker","exec","-it",name,"bash"])
 
 def show_all_running_containers(arguments:list)->None:
-    run(["docker","ps"])
+    run(["sudo","docker","ps"])
 
 def show_all_containers(arguments:list)->None:
-    run(["docker","ps","-a"])
+    run(["sudo","docker","ps","-a"])
 
 def delete_container(arguments:list)->None:
     if len(arguments) < 1:
         name = _ask_valid_value("container name for delete")
     else:
         name = arguments[0]
-    run(["docker","rm",name])
+    run(["sudo","docker","rm",name])
 
 #IMAGES
 def install_image(arguments:list)->None:
@@ -72,17 +72,17 @@ def install_image(arguments:list)->None:
         name = _ask_valid_value("image name")
     else:
         name = arguments[0]
-    run(["docker","pull",name])
+    run(["sudo","docker","pull",name])
 
 def show_all_images(arguments:list)->None:
-    run(["docker","images"])
+    run(["sudo","docker","images"])
 
 def delete_image(arguments:list)->None:
     if len(arguments) < 1:
         name = _ask_valid_value("image name for removing")
     else:
         name = arguments[0]
-    run(["docker","rmi",name])
+    run(["sudo","docker","rmi",name])
 
 #GENERAL
 def _ask_valid_value(name:str)->str:
