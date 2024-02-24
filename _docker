@@ -47,11 +47,14 @@ def stop_container(arguments:list)->None:
     run(["sudo","docker","stop",name])
 
 def get_into_containers_shell(arguments:list)->None:
-    if len(arguments) < 1:
+    if len(arguments) < 2:
         name = _ask_valid_value("running container name")
+        shell = _ask_valid_value("shell of the container For[bash,sh for alpine]")
     else:
         name = arguments[0]
-    run(["sudo","docker","exec","-it",name,"bash"])
+        shell = arguments[1]
+    #run(["sudo","docker","exec","-it",name,"bash"])
+    run(["sudo","docker","exec","-it",name,shell])
 
 def show_all_running_containers(arguments:list)->None:
     run(["sudo","docker","ps"])
