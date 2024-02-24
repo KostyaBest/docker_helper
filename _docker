@@ -87,6 +87,32 @@ def delete_image(arguments:list)->None:
         name = arguments[0]
     run(["sudo","docker","rmi",name])
 
+#DOCKER COMPOSE
+def create_and_run_from_docker_compose_yml(arguments:list)->None:
+    print("U should be in the same folder with docker-compose.yml")
+    run(["sudo","docker","compose","up","-d"])
+
+def stop_and_delete_from_docker_compose_yml(arguments:list)->None:
+    print("U should be in the same folder with docker-compose.yml")
+    run(["sudo","docker","compose","down"])
+
+def build_or_rebuild_serices(arguments:list)->None:
+    print("U should be in the same folder with docker-compose.yml")
+    run(["sudo","docker","compose","build"])
+
+def stop_without_deleting_services(arguments:list)->None:
+    print("U should be in the same folder with docker-compose.yml")
+    run(["sudo","docker","compose","stop"])
+
+def start_stopped_services(arguments:list)->None:
+    print("U should be in the same folder with docker-compose.yml")
+    run(["sudo","docker","compose","start"])
+
+def print_list_of_compose_services(arguments:list)->None:
+    print("U should be in the same folder with docker-compose.yml")
+    run(["sudo","docker","compose","ls"])
+
+
 #GENERAL
 def _ask_valid_value(name:str)->str:
     print(f"Input valid {name}:")
@@ -115,6 +141,19 @@ COMMANDS={
     "images":show_all_images,
     "images_install":install_image,
     "images_delete":delete_image,
+    #Docker Compose
+    "compose_up":create_and_run_from_docker_compose_yml,
+    "up":create_and_run_from_docker_compose_yml,
+    "compose_down":stop_and_delete_from_docker_compose_yml,
+    "down":stop_and_delete_from_docker_compose_yml,
+    "compose_stop_and_delete":stop_and_delete_from_docker_compose_yml,
+    "compose_build":build_or_rebuild_serices,
+    "compose_rebuild":build_or_rebuild_serices,
+    "compose_stop":stop_without_deleting_services,
+    "compose_start_stopped":start_stopped_services,
+    "compose_start":start_stopped_services,
+    "compose_list_of_services":print_list_of_compose_services,
+    "compose_ls":print_list_of_compose_services,
     #GENERAL
     "help":help,
 }
